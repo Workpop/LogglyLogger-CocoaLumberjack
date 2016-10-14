@@ -4,7 +4,7 @@
 
 #import "LogglyFormatter.h"
 #import "LogglyFields.h"
-#define kLogglyFormatStringWhenLogMsgIsNotJson @"{\"loglevel\":\"%@\",\"timestamp\":\"%@\",\"file\":\"%@\",\"fileandlinenumber\":\"%@:%lu\",\"jsonerror\":\"JSON Output Error when trying to create Loggly JSON\",\"message\":\"%@\"}"
+#define kLogglyFormatStringWhenLogMsgIsNotJson @"{\"level\":\"%@\",\"timestamp\":\"%@\",\"file\":\"%@\",\"fileandlinenumber\":\"%@:%lu\",\"jsonerror\":\"JSON Output Error when trying to create Loggly JSON\",\"message\":\"%@\"}"
 
 #pragma mark NSMutableDictionary category.
 // Defined here so it doesn't spill over to the client projects.
@@ -66,7 +66,7 @@
         case DDLogFlagDebug : logLevel = @"debug"; break;
         default             : logLevel = @"verbose"; break;
     }
-    [logfields setObjectNilSafe:logLevel forKey:@"loglevel"];
+    [logfields setObjectNilSafe:logLevel forKey:@"level"];
 
     NSString *iso8601DateString = [self iso8601StringFromDate:(logMessage->_timestamp)];
     [logfields setObjectNilSafe:iso8601DateString forKey:@"timestamp"];
