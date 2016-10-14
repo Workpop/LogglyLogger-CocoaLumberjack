@@ -18,21 +18,25 @@
         [dict setObject:[[NSLocale preferredLanguages] objectAtIndex:0] forKey:@"lang"];
         id bundleDisplayName = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleDisplayName"];
         if (bundleDisplayName != nil) {
-            [dict setObject:bundleDisplayName forKey:@"appname"];
+            [dict setObject:bundleDisplayName forKey:@"appName"];
         } else {
             NSString *bundleName = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleName"];
             if(bundleName != nil) {
-                [dict setObject:bundleName forKey:@"appname"];
+                [dict setObject:bundleName forKey:@"appName"];
             }
         }
         NSString *bundleVersion = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
         if(bundleVersion != nil) {
-            [dict setObject:bundleVersion forKey:@"appversion"];
+            [dict setObject:bundleVersion forKey:@"appVersionCode"];
         }
-        [dict setObject:[UIDevice currentDevice].name forKey:@"devicename"];
-        [dict setObject:[UIDevice currentDevice].model forKey:@"devicemodel"];
-        [dict setObject:[UIDevice currentDevice].systemVersion forKey:@"osversion"];
-        [dict setObject:[self generateRandomStringWithSize:10] forKey:@"sessionid"];
+        NSString *bundleShortVersion = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+        if(bundleShortVersion != nil) {
+            [dict setObject:bundleShortVersion forKey:@"appVersionName"];
+        }
+        [dict setObject:[UIDevice currentDevice].name forKey:@"deviceName"];
+        [dict setObject:[UIDevice currentDevice].model forKey:@"deviceModel"];
+        [dict setObject:[UIDevice currentDevice].systemVersion forKey:@"osVersion"];
+        [dict setObject:[self generateRandomStringWithSize:10] forKey:@"sessionId"];
         _fieldsDictionary = [NSDictionary dictionaryWithDictionary:dict];
     }
     return self;
@@ -55,9 +59,21 @@
     dispatch_barrier_async(_queue, ^{
         NSMutableDictionary *dict = [_fieldsDictionary mutableCopy];
         if (appversion != nil) {
-            [dict setObject:appversion forKey:@"appversion"];
+            [dict setObject:appversion forKey:@"appVersionCode"];
         } else {
-            [dict removeObjectForKey:@"appversion"];
+            [dict removeObjectForKey:@"appVersionCode"];
+        }
+        _fieldsDictionary = [NSDictionary dictionaryWithDictionary:dict];
+    });
+}
+
+- (void)setAppShortVersion:(NSString *)appShortVersion {
+    dispatch_barrier_async(_queue, ^{
+        NSMutableDictionary *dict = [_fieldsDictionary mutableCopy];
+        if (appShortVersion != nil) {
+            [dict setObject:appShortVersion forKey:@"appVersionName"];
+        } else {
+            [dict removeObjectForKey:@"appVersionName"];
         }
         _fieldsDictionary = [NSDictionary dictionaryWithDictionary:dict];
     });
@@ -67,9 +83,9 @@
     dispatch_barrier_async(_queue, ^{
         NSMutableDictionary *dict = [_fieldsDictionary mutableCopy];
         if (sessionid != nil) {
-            [dict setObject:sessionid forKey:@"sessionid"];
+            [dict setObject:sessionid forKey:@"sessionId"];
         } else {
-            [dict removeObjectForKey:@"sessionid"];
+            [dict removeObjectForKey:@"sessionId"];
         }
         _fieldsDictionary = [NSDictionary dictionaryWithDictionary:dict];
     });
@@ -78,10 +94,10 @@
 - (void)setUserid:(NSString *)userid {
     dispatch_barrier_async(_queue, ^{
         NSMutableDictionary *dict = [_fieldsDictionary mutableCopy];
-        if (userid != nil) {
-             [dict setObject:userid forKey:@"userid"];
+        if (userId != nil) {
+             [dict setObject:userid forKey:@"userId"];
         } else {
-            [dict removeObjectForKey:@"userid"];
+            [dict removeObjectForKey:@"userId"];
         }
         _fieldsDictionary = [NSDictionary dictionaryWithDictionary:dict];
     });
