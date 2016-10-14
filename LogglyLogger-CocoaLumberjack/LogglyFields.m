@@ -94,7 +94,7 @@
 - (void)setUserid:(NSString *)userid {
     dispatch_barrier_async(_queue, ^{
         NSMutableDictionary *dict = [_fieldsDictionary mutableCopy];
-        if (userId != nil) {
+        if (userid != nil) {
              [dict setObject:userid forKey:@"userId"];
         } else {
             [dict removeObjectForKey:@"userId"];
