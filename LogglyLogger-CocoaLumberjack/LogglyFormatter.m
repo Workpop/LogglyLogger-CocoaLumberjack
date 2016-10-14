@@ -4,7 +4,7 @@
 
 #import "LogglyFormatter.h"
 #import "LogglyFields.h"
-#define kLogglyFormatStringWhenLogMsgIsNotJson @"{\"loglevel\":\"%@\",\"timestamp\":\"%@\",\"file\":\"%@\",\"fileandlinenumber\":\"%@:%lu\",\"jsonerror\":\"JSON Output Error when trying to create Loggly JSON\",\"rawlogmessage\":\"%@\"}"
+#define kLogglyFormatStringWhenLogMsgIsNotJson @"{\"loglevel\":\"%@\",\"timestamp\":\"%@\",\"file\":\"%@\",\"fileandlinenumber\":\"%@:%lu\",\"jsonerror\":\"JSON Output Error when trying to create Loggly JSON\",\"message\":\"%@\"}"
 
 #pragma mark NSMutableDictionary category.
 // Defined here so it doesn't spill over to the client projects.
@@ -77,7 +77,7 @@
 
     // newlines are not allowed in POSTS to Loggly
     NSString *logMsg = [logMessage->_message stringByReplacingOccurrencesOfString:@"\n" withString:@" "];
-    [logfields setObjectNilSafe:logMsg forKey:@"rawlogmessage"];
+    [logfields setObjectNilSafe:logMsg forKey:@"message"];
 
     NSData *jsondata = [logMsg dataUsingEncoding:NSUTF8StringEncoding];
     NSError *inputJsonError;
@@ -87,7 +87,7 @@
         if (!inputJsonError && [jsondictForLogMsg count] > 0) {
             [logfields addEntriesFromDictionary:jsondictForLogMsg];
             if (!self.alwaysIncludeRawMessage) {
-                [logfields removeObjectForKey:@"rawlogmessage"];
+                [logfields removeObjectForKey:@"message"];
             }
         }
     }
